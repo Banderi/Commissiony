@@ -67,9 +67,14 @@ func update_data():
 				$TextEdit/BtnComplete.hide()
 
 func _ready():
-	update_openclose()
 	get_tree().root.connect("size_changed", self, "resize")
 	remove_textedit_scrollbar()
+	
+	# for some mysterious and ANNOYING reason, the resizing of the box
+	# with the wrapped text fails *slightly* if done too soon. so we
+	# wait for the next idle frame after spawning...
+	yield(get_tree(), "idle_frame")
+	update_openclose()
 
 func remove_textedit_scrollbar():
 	for child in $TextEdit.get_children():
@@ -162,16 +167,39 @@ func _on_BtnDelete_pressed():
 	else:
 		Global.delicate_popup("", "Delete the current item?", self, "confirm_delete")
 
-onready var font = $TextEdit.get("custom_fonts/font")
+onready var FONT = $TextEdit.get("custom_fonts/font")
+onready var SPACE_WIDTH = FONT.get_string_size(" ").x
+func count_total_lines(text : String):
+	var total_lines = 0
+	for line in text.split("\n"):
+		# minimum for each hard-broken line is "1", obviously.
+		var lines_req = 1
+		var line_length = 0
+		for word in line.split(" "):
+			var word_length = FONT.get_string_size(word).x
+			
+			# if line length exceeds box size, wrap
+			line_length += (SPACE_WIDTH + word_length)
+			if line_length > $TextEdit.rect_size.x - 12: # accounting for gutters
+				lines_req += 1
+				line_length = word_length
+		
+		# add final tally to line counter!
+		total_lines += lines_req
+	return total_lines
+func count_wraps_builtin():
+	var carriages = $TextEdit.get_line_count()
+	var wraps = carriages
+	for c in carriages:
+		wraps += $TextEdit.get_line_wrap_count(c)
+#	var wrapped = $TextEdit.get_line_wrapped_text()
+#	wraps = wrapped.size()
+	return wraps
 func resize():
 	if $TextEdit.visible:
-		var carriages = $TextEdit.get_line_count()
-		var wraps = carriages
-		for c in carriages:
-			wraps += $TextEdit.get_line_wrap_count(c)
-#		var wrapped = $TextEdit.get_line_wrapped_text()
-#		wraps = wrapped.size()
-		$TextEdit.rect_size.y = max(font.get_height() * (wraps + 2) + 5, font.get_height() * 4 + 5)
+#		var wraps = count_total_lines($TextEdit.text)
+		var wraps = count_wraps_builtin()
+		$TextEdit.rect_size.y = max(FONT.get_height() * (wraps + 2) + 5, FONT.get_height() * 4 + 5)
 	else:
 		$TextEdit.rect_size.y = 0
 	rect_min_size.y = $TextEdit.rect_size.y + $TextEdit.rect_position.y
@@ -240,17 +268,14 @@ func _input(event):
 	if name_edit_lost_focus:
 		hide_title_lineedit()
 		name_edit_lost_focus = false
-	if event is InputEventMouseButton:
-		var SC = Global.list_node.get_parent()
-#		var SB = SC.get_v_scrollbar()
-##		var coeff = int(float(SB.max_value - SB.min_value) * 0.005)
-#		var coeff = 10
-		if event.button_index == BUTTON_WHEEL_UP:
-			SC._on_redirected_input(event)
-#			SC.set_v_scroll (SC.get_v_scroll() - coeff)
-		if event.button_index == BUTTON_WHEEL_DOWN:
-			SC._on_redirected_input(event)
-#			SC.set_v_scroll (SC.get_v_scroll() + coeff)
+#	if event is InputEventMouseButton:
+#		var SC = Global.list_node.get_parent()
+#		if event.button_index == BUTTON_WHEEL_UP:
+#			SC._on_redirected_input(event)
+#		if event.button_index == BUTTON_WHEEL_DOWN:
+#			SC._on_redirected_input(event)
+#		if event.button_index == BUTTON_MIDDLE:
+#			SC._on_redirected_input(event)
 			
 func confirm_new_user(new_userid):
 	Global.new_user(new_userid)
@@ -307,3 +332,8 @@ func _process(delta):
 		$Button.set("custom_colors/font_color_hover",null)
 		$Button.set("custom_colors/font_color_hover_pressed",null)
 		$Button.set("custom_colors/font_color_pressed",null)
+
+
+func _on_Button2_pressed():
+	resize()
+	pass # Replace with function body.

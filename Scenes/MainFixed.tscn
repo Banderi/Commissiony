@@ -228,6 +228,16 @@ margin_bottom = 29.0
 rect_min_size = Vector2( 0, 0 )
 popup_exclusive = true
 
+[node name="Button" type="Button" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -128.0
+margin_top = 8.0
+margin_right = -91.0
+margin_bottom = 28.0
+text = "test"
+
 [connection signal="pressed" from="Header/BtnClipboard" to="." method="_on_BtnClipboard_pressed"]
 [connection signal="pressed" from="Header/BtnTODO" to="." method="_on_BtnTODO_pressed"]
 [connection signal="pressed" from="Header/BtnPWYW" to="." method="_on_BtnPWYW_pressed"]
@@ -237,3 +247,4 @@ popup_exclusive = true
 [connection signal="pressed" from="Header/BtnSettings" to="." method="_on_BtnSettings_pressed"]
 [connection signal="toggled" from="Autosave" to="." method="_on_Autosave_toggled"]
 [connection signal="text_changed" from="Clipboard" to="." method="_on_Clipboard_text_changed"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

@@ -106,3 +106,6 @@ func _on_Clipboard_text_changed():
 func _on_Autosave_toggled(button_pressed):
 	if !is_loading:
 		Global.set_config("autosave", button_pressed)
+
+func _on_Button_pressed():
+	pass # Replace with function body.
