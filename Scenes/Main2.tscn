@@ -1,0 +1,165 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scenes/CommSlot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://fonts/minecraftia.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 8.0
+bg_color = Color( 0, 0, 0, 0.121569 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+[node name="Root" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MainContainer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="TopPortion" type="Control" parent="MainContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -66.0
+margin_bottom = -101.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="List" type="ColorRect" parent="MainContainer/TopPortion"]
+anchor_bottom = 1.0
+margin_right = 224.0
+color = Color( 0, 0, 0, 0.121569 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/TopPortion/List"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/TopPortion/List/ScrollContainer"]
+margin_right = 224.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="ColorRect" parent="MainContainer/TopPortion/List/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 224.0
+
+[node name="ColorRect2" parent="MainContainer/TopPortion/List/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 26.0
+margin_right = 224.0
+margin_bottom = 48.0
+
+[node name="RightPanel" type="Control" parent="MainContainer/TopPortion"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 239.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect" type="ColorRect" parent="MainContainer/TopPortion/RightPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.121569 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="FromName" type="LineEdit" parent="MainContainer/TopPortion/RightPanel"]
+anchor_right = 1.0
+margin_right = -187.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 0, 27 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/normal = SubResource( 1 )
+text = "Drkgne72"
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BtnDone" parent="MainContainer/TopPortion/RightPanel" instance=ExtResource( 2 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -171.0
+margin_top = 0.0
+margin_right = -59.0
+margin_bottom = 27.0
+rect_scale = Vector2( 1, 1 )
+text = "Done"
+
+[node name="BtnDel" parent="MainContainer/TopPortion/RightPanel" instance=ExtResource( 2 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -46.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 27.0
+rect_scale = Vector2( 1, 1 )
+focus_mode = 2
+text = "x"
+
+[node name="FromAddress" type="LineEdit" parent="MainContainer/TopPortion/RightPanel"]
+anchor_right = 1.0
+margin_top = 36.0
+margin_right = -187.0
+margin_bottom = 63.0
+rect_min_size = Vector2( 0, 27 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/normal = SubResource( 1 )
+text = "drga72@hotmail.com (Beber Joestar Jr.)"
+
+[node name="Amount" type="LineEdit" parent="MainContainer/TopPortion/RightPanel"]
+anchor_right = 1.0
+margin_left = 278.0
+margin_top = 36.0
+margin_right = -121.0
+margin_bottom = 63.0
+rect_min_size = Vector2( 0, 27 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/normal = SubResource( 1 )
+text = "75"
+
+[node name="Type" type="LineEdit" parent="MainContainer/TopPortion/RightPanel"]
+visible = false
+anchor_right = 1.0
+margin_left = 344.0
+margin_top = 36.0
+margin_bottom = 63.0
+rect_min_size = Vector2( 0, 27 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/normal = SubResource( 1 )
+text = "Sketch"
+
+[node name="Type2" type="MenuButton" parent="MainContainer/TopPortion/RightPanel"]
+anchor_right = 1.0
+margin_left = 344.0
+margin_top = 36.0
+margin_bottom = 63.0
+rect_min_size = Vector2( 0, 27 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/disabled = SubResource( 2 )
+custom_styles/normal = SubResource( 2 )
+text = "Sketch"

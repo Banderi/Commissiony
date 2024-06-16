@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://fonts/basis33.tres" type="DynamicFont" id=1]
+[ext_resource path="res://scripts/Counter.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 2.0
+content_margin_right = 3.0
+bg_color = Color( 1, 0, 0, 1 )
+
+[node name="Counter" type="Label"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -14.0
+margin_top = -13.0
+margin_bottom = 3.0
+grow_horizontal = 0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 1 )
+custom_styles/normal = SubResource( 2 )
+text = "1"
+align = 2
+script = ExtResource( 2 )

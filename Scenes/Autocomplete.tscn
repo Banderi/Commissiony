@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/NameOption.tscn" type="PackedScene" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.101961, 0.101961, 0.105882, 1 )
+
+[node name="Autocomplete" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -200.0
+margin_bottom = -524.0
+rect_min_size = Vector2( 0, 21 )
+custom_styles/bg = SubResource( 1 )
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 200.0
+margin_bottom = 21.0
+custom_constants/separation = -5
+
+[node name="NameOption" parent="VBoxContainer" instance=ExtResource( 1 )]

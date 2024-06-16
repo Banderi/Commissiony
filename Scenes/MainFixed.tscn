@@ -1,0 +1,239 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://fonts/basis33.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/RobotoMono-Regular.tres" type="DynamicFont" id=2]
+[ext_resource path="res://fonts/minecraftia8.tres" type="DynamicFont" id=3]
+[ext_resource path="res://graphics/style_btn2.tres" type="StyleBox" id=4]
+[ext_resource path="res://scenes/Counter.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Autocomplete.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/ListItem.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scripts/Main.gd" type="Script" id=8]
+[ext_resource path="res://scripts/ControlInputOverrid.gd" type="Script" id=9]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.694118 )
+
+[node name="Root" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 2
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Header" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 17.0
+custom_constants/separation = 2
+
+[node name="BtnClipboard" type="Button" parent="Header"]
+margin_right = 59.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "Clipboard"
+
+[node name="BtnTODO" type="Button" parent="Header"]
+margin_left = 61.0
+margin_right = 120.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "To finish..."
+
+[node name="Counter" parent="Header/BtnTODO" instance=ExtResource( 5 )]
+mouse_default_cursor_shape = 2
+
+[node name="BtnPWYW" type="Button" parent="Header"]
+visible = false
+margin_left = 122.0
+margin_right = 158.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "PWYW"
+
+[node name="BtnWaitlist" type="Button" parent="Header"]
+margin_left = 122.0
+margin_right = 167.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "Waitlist"
+
+[node name="Counter" parent="Header/BtnWaitlist" instance=ExtResource( 5 )]
+mouse_default_cursor_shape = 2
+
+[node name="BtnHistorics" type="Button" parent="Header"]
+margin_left = 169.0
+margin_right = 196.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "Old"
+
+[node name="BtnUsers" type="Button" parent="Header"]
+margin_left = 198.0
+margin_right = 240.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "Users"
+
+[node name="BtnSettings" type="Button" parent="Header"]
+visible = false
+margin_left = 251.0
+margin_right = 303.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "Settings"
+
+[node name="Autosave" type="CheckBox" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -29.0
+margin_top = 6.0
+margin_right = -5.0
+margin_bottom = 30.0
+grow_horizontal = 0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 1 )
+text = "Autosave"
+align = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 33.0
+margin_bottom = -21.0
+mouse_filter = 2
+scroll_horizontal_enabled = false
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+visible = false
+margin_right = 400.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+
+[node name="ListItem" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+margin_right = 400.0
+margin_bottom = 21.0
+
+[node name="ListItem2" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+margin_top = 25.0
+margin_right = 400.0
+margin_bottom = 46.0
+
+[node name="ListItem3" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+margin_top = 50.0
+margin_right = 400.0
+margin_bottom = 71.0
+
+[node name="ListItem4" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+margin_top = 75.0
+margin_right = 400.0
+margin_bottom = 96.0
+
+[node name="Clipboard" type="TextEdit" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 34.0
+margin_right = -3.0
+margin_bottom = -25.0
+custom_constants/line_spacing = 0
+custom_fonts/font = ExtResource( 2 )
+custom_styles/normal = SubResource( 1 )
+text = "asdasd"
+fold_gutter = true
+wrap_enabled = true
+caret_blink = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Autocomplete" parent="." instance=ExtResource( 6 )]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.0
+margin_left = -160.0
+margin_top = 56.0
+margin_right = 40.0
+margin_bottom = 115.0
+
+[node name="Panel" type="Panel" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -21.0
+custom_styles/panel = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_right = -5.0
+custom_fonts/font = ExtResource( 2 )
+valign = 1
+
+[node name="Delicate" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.317647 )
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="Delicate"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -143.0
+margin_top = -29.0
+margin_right = 143.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 0, 0 )
+popup_exclusive = true
+
+[connection signal="pressed" from="Header/BtnClipboard" to="." method="_on_BtnClipboard_pressed"]
+[connection signal="pressed" from="Header/BtnTODO" to="." method="_on_BtnTODO_pressed"]
+[connection signal="pressed" from="Header/BtnPWYW" to="." method="_on_BtnPWYW_pressed"]
+[connection signal="pressed" from="Header/BtnWaitlist" to="." method="_on_BtnWaitlist_pressed"]
+[connection signal="pressed" from="Header/BtnHistorics" to="." method="_on_BtnHistorics_pressed"]
+[connection signal="pressed" from="Header/BtnUsers" to="." method="_on_BtnUsers_pressed"]
+[connection signal="pressed" from="Header/BtnSettings" to="." method="_on_BtnSettings_pressed"]
+[connection signal="toggled" from="Autosave" to="." method="_on_Autosave_toggled"]
+[connection signal="text_changed" from="Clipboard" to="." method="_on_Clipboard_text_changed"]

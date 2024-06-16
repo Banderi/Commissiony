@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://graphics/style_btn2.tres" type="StyleBox" id=1]
+[ext_resource path="res://fonts/RobotoMono-Regular.tres" type="DynamicFont" id=2]
+[ext_resource path="res://fonts/basis33.tres" type="DynamicFont" id=3]
+[ext_resource path="res://graphics/style_btn2b.tres" type="StyleBox" id=4]
+[ext_resource path="res://graphics/style_btn2c.tres" type="StyleBox" id=5]
+[ext_resource path="res://scripts/ListItemLogicMain.gd" type="Script" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.694118 )
+
+[node name="ListItem" type="Control"]
+anchor_right = 1.0
+margin_bottom = 117.0
+rect_min_size = Vector2( 0, 21 )
+mouse_filter = 1
+script = ExtResource( 6 )
+
+[node name="Button" type="Button" parent="."]
+anchor_right = 1.0
+margin_right = -1.0
+margin_bottom = 17.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 2 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 1 )
+toggle_mode = true
+text = "Drakr22"
+align = 0
+
+[node name="LabelDate" type="Label" parent="Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_right = -4.0
+custom_fonts/font = ExtResource( 2 )
+text = "(10/5/2024)"
+align = 2
+valign = 1
+
+[node name="LineEdit" type="LineEdit" parent="Button"]
+margin_left = 6.0
+margin_top = -2.0
+margin_right = 113.0
+margin_bottom = 23.0
+custom_colors/font_color = Color( 1, 0.678431, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_styles/normal = SubResource( 2 )
+text = "asdasd"
+caret_blink = true
+
+[node name="TextEdit" type="TextEdit" parent="."]
+anchor_right = 1.0
+margin_top = 21.0
+margin_bottom = 96.0
+mouse_filter = 1
+custom_constants/line_spacing = 0
+custom_fonts/font = ExtResource( 2 )
+custom_styles/normal = SubResource( 1 )
+text = "asdasd"
+fold_gutter = true
+wrap_enabled = true
+caret_blink = true
+
+[node name="BtnComplete" type="Button" parent="TextEdit"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -21.0
+margin_right = -25.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 2 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 1 )
+text = "Done"
+
+[node name="BtnDelete" type="Button" parent="TextEdit"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -21.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 2 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 1 )
+text = "X"
+
+[node name="CheckBox" type="CheckBox" parent="TextEdit"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -24.0
+margin_right = 91.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+text = "Tracked"
+
+[connection signal="toggled" from="Button" to="." method="_on_Button_toggled"]
+[connection signal="focus_entered" from="Button/LineEdit" to="." method="_on_LineEdit_focus_entered"]
+[connection signal="focus_exited" from="Button/LineEdit" to="." method="_on_LineEdit_focus_exited"]
+[connection signal="text_changed" from="Button/LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="text_entered" from="Button/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="focus_entered" from="TextEdit" to="." method="_on_TextEdit_focus_entered"]
+[connection signal="text_changed" from="TextEdit" to="." method="_on_TextEdit_text_changed"]
+[connection signal="pressed" from="TextEdit/BtnComplete" to="." method="_on_BtnComplete_pressed"]
+[connection signal="pressed" from="TextEdit/BtnDelete" to="." method="_on_BtnDelete_pressed"]
+[connection signal="toggled" from="TextEdit/CheckBox" to="." method="_on_CheckBox_toggled"]
