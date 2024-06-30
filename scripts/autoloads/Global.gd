@@ -112,6 +112,12 @@ func _process(delta):
 		footer_label.text = ""
 	if SETTINGS.autosave && unsaved_changes:
 		save_data()
+	if t >= 5:
+		t = 0
+		for n in get_tree().get_nodes_in_group("time_update"):
+			n.update_date_stamp_label()
+		print("Datestamp update")
+	
 func save_settings():
 	if !IO.write("user://SETTINGS.json", JSON.print(SETTINGS,"\t")):
 		footer_text("Could not save data to disk!")

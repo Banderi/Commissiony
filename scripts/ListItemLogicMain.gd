@@ -24,7 +24,15 @@ func update_comm_title_username():
 #			if howmany > 1:
 #				title += "(%d)" % [howmany]
 			$Button.text = title.join(" ")
-	
+
+func update_date_stamp_label():
+	if data == null || list == "users":
+		return
+	var time = OS.get_datetime_from_unix_time(data.timestamp)
+#	$Button/LabelDate.text = "%d/%02d/%02d (%d days ago)" % [
+	$Button/LabelDate.text = "%d days ago" % [
+		(OS.get_unix_time() - data.timestamp) / 86400
+	]
 func update_data():
 	if data == null: # for empty "placeholder" items
 		$TextEdit.text = ""
@@ -43,12 +51,7 @@ func update_data():
 		$TextEdit/CheckBox.hide()
 		hide_title_lineedit()
 	else:
-		var time = OS.get_datetime_from_unix_time(data.timestamp)
-#		$Button/LabelDate.text = "%d/%02d/%02d (%d days ago)" % [
-		$Button/LabelDate.text = "%d days ago" % [
-			(OS.get_unix_time() - data.timestamp) / 86400
-		]
-		
+		update_date_stamp_label()
 		update_comm_title_username()
 		$TextEdit.text = data.text
 		
@@ -75,6 +78,7 @@ func _ready():
 	# wait for the next idle frame after spawning...
 	yield(get_tree(), "idle_frame")
 	update_openclose()
+	add_to_group("time_update")
 
 func remove_textedit_scrollbar():
 	for child in $TextEdit.get_children():
@@ -268,14 +272,6 @@ func _input(event):
 	if name_edit_lost_focus:
 		hide_title_lineedit()
 		name_edit_lost_focus = false
-#	if event is InputEventMouseButton:
-#		var SC = Global.list_node.get_parent()
-#		if event.button_index == BUTTON_WHEEL_UP:
-#			SC._on_redirected_input(event)
-#		if event.button_index == BUTTON_WHEEL_DOWN:
-#			SC._on_redirected_input(event)
-#		if event.button_index == BUTTON_MIDDLE:
-#			SC._on_redirected_input(event)
 			
 func confirm_new_user(new_userid):
 	Global.new_user(new_userid)
@@ -332,7 +328,6 @@ func _process(delta):
 		$Button.set("custom_colors/font_color_hover",null)
 		$Button.set("custom_colors/font_color_hover_pressed",null)
 		$Button.set("custom_colors/font_color_pressed",null)
-
 
 func _on_Button2_pressed():
 	resize()
