@@ -101,12 +101,15 @@ func update_openclose():
 	if data != null && list != "users":
 		data["open"] = int($Button.pressed)
 	$TextEdit.visible = $Button.pressed
-#	if list == "users":
-#		$Button/LineEdit.visible = true
-#	else:
 	$Button/LineEdit.visible = $Button.pressed
 	$Button/LineEdit.text = ""
+	
+	# we have to call this twice after the UI shows the full elements,
+	# otherwise it breaks >:(
 	resize()
+	if $TextEdit.visible:
+		yield(Engine.get_main_loop(), "idle_frame")
+		resize()
 func spawn_new_item_from_placeholder():
 	var new = null
 	if list == "users":
@@ -207,6 +210,7 @@ func resize():
 	else:
 		$TextEdit.rect_size.y = 0
 	rect_min_size.y = $TextEdit.rect_size.y + $TextEdit.rect_position.y
+#	print("resized!")
 func _on_TextEdit_text_changed():
 	Global.set_unsaved_changes(true)
 	data.text = $TextEdit.text
@@ -328,6 +332,8 @@ func _process(delta):
 		$Button.set("custom_colors/font_color_hover",null)
 		$Button.set("custom_colors/font_color_hover_pressed",null)
 		$Button.set("custom_colors/font_color_pressed",null)
+	
+#	resize()
 
 func _on_Button2_pressed():
 	resize()
