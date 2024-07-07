@@ -55,8 +55,6 @@ func _input(event):
 			Global.last_focused.toggle()
 	if Input.is_action_just_pressed("save"):
 		Global.save_data()
-#	if Input.is_action_just_pressed("load"):
-#		load_data()
 	if Input.is_action_just_pressed("reload"):
 		get_tree().reload_current_scene()
 	if Input.is_action_just_pressed("ui_cancel"):

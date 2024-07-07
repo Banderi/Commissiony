@@ -10,26 +10,15 @@ func update_comm_title_username():
 			$TextEdit.mouse_filter = MOUSE_FILTER_IGNORE
 			$TextEdit.text = ""
 		_:
-#			var title = $Button.text.split(" ",false,1)
 			var title = [data.userid] as PoolStringArray
 			var extra = data.get("extra","")
 			if extra != "":
 				title.push_back(extra)
-#			var howmany = 1
-#			for n in Global.list_node.get_children():
-#				if n == self:
-#					break
-#				if n.data.get("userid",-1) == data.userid:
-#					howmany += 1
-#			if howmany > 1:
-#				title += "(%d)" % [howmany]
 			$Button.text = title.join(" ")
-
 func update_date_stamp_label():
 	if data == null || list == "users":
 		return
 	var time = OS.get_datetime_from_unix_time(data.timestamp)
-#	$Button/LabelDate.text = "%d/%02d/%02d (%d days ago)" % [
 	$Button/LabelDate.text = "%d days ago" % [
 		(OS.get_unix_time() - data.timestamp) / 86400
 	]
@@ -37,11 +26,8 @@ func update_data():
 	if data == null: # for empty "placeholder" items
 		$TextEdit.text = ""
 		$Button.text = ""
-#		$Button.text = "      [+]"
 		$TextEdit.text = ""
-#		$Button/LabelDate.text = ""
 		$Button/LabelDate.text = "[new]"
-#		$Button/LabelDate.text = "[+]"
 		$TextEdit/BtnComplete.hide()
 		$TextEdit/BtnDelete.hide()
 		return
@@ -55,7 +41,6 @@ func update_data():
 		update_comm_title_username()
 		$TextEdit.text = data.text
 		
-#		call_deferred("toggle",data.get("open",0))
 		toggle(data.get("open",0))
 		$TextEdit/BtnComplete.show()
 		$TextEdit/CheckBox.hide()
@@ -110,6 +95,7 @@ func update_openclose():
 	if $TextEdit.visible:
 		yield(Engine.get_main_loop(), "idle_frame")
 		resize()
+		scroll_to_fit()
 func spawn_new_item_from_placeholder():
 	var new = null
 	if list == "users":
@@ -199,24 +185,27 @@ func count_wraps_builtin():
 	var wraps = carriages
 	for c in carriages:
 		wraps += $TextEdit.get_line_wrap_count(c)
-#	var wrapped = $TextEdit.get_line_wrapped_text()
-#	wraps = wrapped.size()
 	return wraps
 func resize():
 	if $TextEdit.visible:
-#		var wraps = count_total_lines($TextEdit.text)
 		var wraps = count_wraps_builtin()
 		$TextEdit.rect_size.y = max(FONT.get_height() * (wraps + 2) + 5, FONT.get_height() * 4 + 5)
 	else:
 		$TextEdit.rect_size.y = 0
 	rect_min_size.y = $TextEdit.rect_size.y + $TextEdit.rect_position.y
-#	print("resized!")
 func _on_TextEdit_text_changed():
 	Global.set_unsaved_changes(true)
 	data.text = $TextEdit.text
 	resize()
 func _on_TextEdit_focus_entered():
 	Global.last_focused = self
+func scroll_to_fit():
+	yield(Engine.get_main_loop(), "idle_frame")
+	var container = get_parent().get_parent()
+	var container_size = container.rect_size.y
+	var lowest_point = rect_position.y + rect_size.y
+	if lowest_point > container_size:
+		container.SB.value += lowest_point - container_size
 
 # username / title edit
 var name_edit_lost_focus = false
@@ -332,8 +321,6 @@ func _process(delta):
 		$Button.set("custom_colors/font_color_hover",null)
 		$Button.set("custom_colors/font_color_hover_pressed",null)
 		$Button.set("custom_colors/font_color_pressed",null)
-	
-#	resize()
 
 func _on_Button2_pressed():
 	resize()
