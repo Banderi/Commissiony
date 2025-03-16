@@ -1,34 +1,72 @@
 extends Node
 
+var TEST_PRINT_LABEL = null
+func TEST_PRNT(txt):
+	TEST_PRINT_LABEL.text = str(txt)
+	print(txt)
 
 onready var item_scn = load("res://scenes/ListItem.tscn")
 var list_node = null
 var last_focused = null
 var all_are_closed = false
-func clear_list():
+func clear_list(FORCE_CLEAR = true):
 	list_node.show()
-	for n in list_node.get_children():
-		n.free()
+	if FORCE_CLEAR:
+		for n in list_node.get_children():
+			n.queue_free()
 	last_focused = null
 	clipboard.hide()
 	autocomplete.hide()
 func spawn_list_item(data, userid, list):
 	var item = item_scn.instance()
-	item.list = list
-	item.data = data
-	item.userid = userid
-	if data == null:
-		data = {}
-	item.update_data()
+	item.setup(data, userid, list) # moved everything here!
 	list_node.add_child(item)
 	return item
 
-func populate_list(list):
-	clear_list()
-	for i in DATA.lists.get(list,[]):
-		spawn_list_item(i, null, list)
+var __att = 0.0
+var __tA = 0.0
+var __tB = 0.0
+func populate_list(list, FORCE_CLEAR = true):
+#	var _t0 = OS.get_ticks_usec()
+	clear_list(FORCE_CLEAR)
+	
+#	var _t1 = OS.get_ticks_usec()
+	
+	var list_present = list_node.get_children()
+	var list_required = DATA.lists.get(list,[])
+	var total_present = list_present.size()
+	var total_required = list_required.size()
+	
+	if FORCE_CLEAR:
+		for i in list_required:
+			spawn_list_item(i, null, list)
+	else:					# An attempt at optimizing by using previous items
+		var c = 0			# instead of respawning everything. Not worth it..
+		for i in list_required:
+			if c < total_present:
+				list_present[c].setup(i, null, list)
+			else:
+				spawn_list_item(i, null, list)
+			c += 1
+		if c < total_present:
+			for i in range(c, total_present):
+				list_present[i].queue_free()
+	
 	if list != "old":
 		spawn_list_item(null, null, list) # add empty placeholder
+	
+#	var _t2 = OS.get_ticks_usec()
+#	var _tA = _t1 - _t0
+#	var _tB = _t2 - _t1
+#	__att += 1.0
+#	__tA += float(_tA)
+#	__tB += float(_tB)
+#	if true:
+#		TEST_PRNT("T:%d, Clear: %.2fms -- pop: %.2fms (%.2fms)" %
+#		[total_required,__tA*0.001/__att, __tB*0.001/__att, (__tB*0.001/__att)/total_required])
+#	else:
+#		TEST_PRNT("Clear: %.2fms -- pop: %.2fms (%.2f%%)" %
+#		[_tA*0.001, _tB*0.001, __tA / __tB])
 func new_list_item(list, item):
 	DATA.lists[list].push_back(item)
 	set_unsaved_changes(true)
@@ -113,10 +151,10 @@ func _process(delta):
 	if SETTINGS.autosave && unsaved_changes:
 		save_data()
 	if t >= 5:
+#		print("Datestamp update")
 		t = 0
 		for n in get_tree().get_nodes_in_group("time_update"):
 			n.update_date_stamp_label()
-		print("Datestamp update")
 	
 func save_settings():
 	if !IO.write("user://SETTINGS.json", JSON.print(SETTINGS,"\t")):
@@ -195,7 +233,7 @@ var SETTINGS = {
 
 var delicate_node = null
 var popup_node = null
-signal popup_confirmed
+#signal popup_confirmed
 func delicate_popup(title, text, node, callback, args = []):
 	delicate(true)
 	popup_node.window_title = title

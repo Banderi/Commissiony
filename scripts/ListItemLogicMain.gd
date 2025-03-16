@@ -16,9 +16,9 @@ func update_comm_title_username():
 				title.push_back(extra)
 			$Button.text = title.join(" ")
 func update_date_stamp_label():
-	if data == null || list == "users":
+	if data == null || list == "users" || !data.has("timestamp"):
 		return
-	var time = OS.get_datetime_from_unix_time(data.timestamp)
+	var _time = OS.get_datetime_from_unix_time(data.timestamp)
 	$Button/LabelDate.text = "%d days ago" % [
 		(OS.get_unix_time() - data.timestamp) / 86400
 	]
@@ -54,8 +54,14 @@ func update_data():
 			"old":
 				$TextEdit/BtnComplete.hide()
 
+func setup(_data, _userid, _list):
+	list = _list
+	data = _data
+	userid = _userid
+	call_deferred("update_data")
+
 func _ready():
-	get_tree().root.connect("size_changed", self, "resize")
+	var _r = get_tree().root.connect("size_changed", self, "resize")
 	remove_textedit_scrollbar()
 	
 	# for some mysterious and ANNOYING reason, the resizing of the box
@@ -67,10 +73,9 @@ func _ready():
 
 func remove_textedit_scrollbar():
 	for child in $TextEdit.get_children():
-		if child is VScrollBar:
-			$TextEdit.remove_child(child)
-		elif child is HScrollBar:
-			$TextEdit.remove_child(child)  
+		if child is VScrollBar || child is HScrollBar:
+			child.self_modulate = Color(0,0,0,0)
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 func focus():
 	Global.last_focused = self
@@ -107,7 +112,9 @@ func spawn_new_item_from_placeholder():
 			"userid": "",
 			"cost": 0,
 			"text": "",
+			"created": OS.get_unix_time(),
 			"timestamp": OS.get_unix_time(),
+			"flags": 0,
 			"open": 0
 		}
 		Global.DATA.lists[list].push_back(d)
@@ -133,6 +140,7 @@ func move_to_list(new_list):
 	Global.new_list_item(new_list, data)
 	Global.delete_list_item(list, data)
 	data.timestamp = OS.get_unix_time()
+	data["open"] = 0
 	queue_free()
 
 func confirm_complete():
@@ -261,7 +269,7 @@ func _on_LineEdit_text_entered(new_text):
 			else:
 				name_edit_lost_focus = true
 
-func _input(event):
+func _input(_event):
 	if name_edit_lost_focus:
 		hide_title_lineedit()
 		name_edit_lost_focus = false
@@ -310,7 +318,7 @@ func _on_CheckBox_toggled(button_pressed):
 	data["counter"] = int(button_pressed)
 	Global.set_unsaved_changes(true)
 
-func _process(delta):
+func _process(_delta):
 	if list != "users" && data != null && ((data.get("counter",false) && list == "waitlist") || list == "todo"):
 		$Button.set("custom_colors/font_color",Color("ffe300"))
 		$Button.set("custom_colors/font_color_hover",Color(1,1,1,1))

@@ -3,7 +3,7 @@ extends ScrollContainer
 onready var SB = get_v_scrollbar()
 func _ready():
 #	SB.custom_step = -0.0001
-	connect("gui_input", SB, "_gui_input")
+	var _r = connect("gui_input", SB, "_gui_input")
 
 func redirect_input(event):
 	emit_signal("gui_input", event)

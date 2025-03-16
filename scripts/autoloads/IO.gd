@@ -179,7 +179,7 @@ func unzip(zip_file, destination):
 		return false
 
 	# read zip file contents and adds them to project's virtual workspace
-	ProjectSettings.load_resource_pack(zip_file)
+	var _r = ProjectSettings.load_resource_pack(zip_file)
 
 	# extract single files from project workspace and write to disk
 	for f in gdunzip.files:

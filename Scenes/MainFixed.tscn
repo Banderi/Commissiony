@@ -209,6 +209,20 @@ margin_right = -5.0
 custom_fonts/font = ExtResource( 2 )
 valign = 1
 
+[node name="TEST" type="Label" parent="Panel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = -8.0
+margin_right = -5.0
+margin_bottom = -8.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 6
+custom_fonts/font = ExtResource( 2 )
+text = "asdasdasd"
+valign = 1
+
 [node name="Delicate" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
@@ -236,6 +250,7 @@ margin_left = -128.0
 margin_top = 8.0
 margin_right = -91.0
 margin_bottom = 28.0
+toggle_mode = true
 text = "test"
 
 [connection signal="pressed" from="Header/BtnClipboard" to="." method="_on_BtnClipboard_pressed"]
