@@ -5,11 +5,17 @@ func TEST_PRNT(txt):
 	TEST_PRINT_LABEL.text = str(txt)
 	print(txt)
 
+enum FLAGS {
+	NORMAL = 0,
+	IMPORTANT = 1,
+	ON_HOLD = 2
+}
+
 onready var item_scn = load("res://scenes/ListItem.tscn")
 var list_node = null
 var last_focused = null
 var all_are_closed = false
-func clear_list(FORCE_CLEAR = true):
+func clear_list():
 	list_node.show()
 	if FORCE_CLEAR:
 		for n in list_node.get_children():
@@ -23,15 +29,10 @@ func spawn_list_item(data, userid, list):
 	list_node.add_child(item)
 	return item
 
-var __att = 0.0
-var __tA = 0.0
-var __tB = 0.0
-func populate_list(list, FORCE_CLEAR = true):
-#	var _t0 = OS.get_ticks_usec()
-	clear_list(FORCE_CLEAR)
+const FORCE_CLEAR = true
+func populate_list(list : String, flags : Array = [], flags_exclude : Array = []):
 	
-#	var _t1 = OS.get_ticks_usec()
-	
+	clear_list()
 	var list_present = list_node.get_children()
 	var list_required = DATA.lists.get(list,[])
 	var total_present = list_present.size()
@@ -39,6 +40,25 @@ func populate_list(list, FORCE_CLEAR = true):
 	
 	if FORCE_CLEAR:
 		for i in list_required:
+			
+			# check that flags match!
+			var i_flags = int(i.get("flags", 0))
+			var any_flag_match = false
+			if flags != []:
+				for f in flags:
+					if i_flags & f:
+						any_flag_match = true
+						break
+				if !any_flag_match:
+					continue
+					
+			if flags_exclude != []:
+				any_flag_match = false
+				for f in flags_exclude:
+					if i_flags & f:
+						any_flag_match = true
+				if any_flag_match:
+					continue
 			spawn_list_item(i, null, list)
 	else:					# An attempt at optimizing by using previous items
 		var c = 0			# instead of respawning everything. Not worth it..
@@ -55,18 +75,6 @@ func populate_list(list, FORCE_CLEAR = true):
 	if list != "old":
 		spawn_list_item(null, null, list) # add empty placeholder
 	
-#	var _t2 = OS.get_ticks_usec()
-#	var _tA = _t1 - _t0
-#	var _tB = _t2 - _t1
-#	__att += 1.0
-#	__tA += float(_tA)
-#	__tB += float(_tB)
-#	if true:
-#		TEST_PRNT("T:%d, Clear: %.2fms -- pop: %.2fms (%.2fms)" %
-#		[total_required,__tA*0.001/__att, __tB*0.001/__att, (__tB*0.001/__att)/total_required])
-#	else:
-#		TEST_PRNT("Clear: %.2fms -- pop: %.2fms (%.2f%%)" %
-#		[_tA*0.001, _tB*0.001, __tA / __tB])
 func new_list_item(list, item):
 	DATA.lists[list].push_back(item)
 	set_unsaved_changes(true)

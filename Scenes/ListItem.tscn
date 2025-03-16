@@ -100,6 +100,7 @@ custom_styles/normal = ExtResource( 1 )
 text = "X"
 
 [node name="CheckBox" type="CheckBox" parent="TextEdit"]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -24.0
@@ -108,6 +109,22 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 3 )
 text = "Tracked"
+
+[node name="OptionButton" type="OptionButton" parent="TextEdit"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = -22.0
+margin_right = 87.0
+margin_bottom = -1.0
+focus_mode = 0
+custom_fonts/font = ExtResource( 2 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 1 )
+text = "Normal"
+items = [ "Normal", null, false, 0, null, "Important", null, false, 1, null, "On hold", null, false, 2, null ]
+selected = 0
 
 [node name="Button2" type="Button" parent="."]
 visible = false
@@ -129,4 +146,5 @@ text = "test"
 [connection signal="pressed" from="TextEdit/BtnComplete" to="." method="_on_BtnComplete_pressed"]
 [connection signal="pressed" from="TextEdit/BtnDelete" to="." method="_on_BtnDelete_pressed"]
 [connection signal="toggled" from="TextEdit/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="item_selected" from="TextEdit/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]

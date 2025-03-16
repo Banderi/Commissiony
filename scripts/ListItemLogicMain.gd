@@ -37,20 +37,24 @@ func update_data():
 		$TextEdit/CheckBox.hide()
 		hide_title_lineedit()
 	else:
+		FIX_OUTDATED_DATA_FORMATS()
 		update_date_stamp_label()
 		update_comm_title_username()
 		$TextEdit.text = data.text
 		
 		toggle(data.get("open",0))
 		$TextEdit/BtnComplete.show()
-		$TextEdit/CheckBox.hide()
+#		$TextEdit/CheckBox.hide()
+		$TextEdit/OptionButton.hide()
 		match list:
 			"todo":
 				$TextEdit/BtnComplete.text = "Done"
 			"pwyw","waitlist":
 				$TextEdit/BtnComplete.text = "Start"
-				$TextEdit/CheckBox.show()
-				$TextEdit/CheckBox.pressed = bool(data.get("counter", 0))
+				$TextEdit/OptionButton.show()
+				$TextEdit/OptionButton.select(int(data.get("flags", 0)))
+#				$TextEdit/CheckBox.show()
+#				$TextEdit/CheckBox.pressed = bool(data.get("counter", 0))
 			"old":
 				$TextEdit/BtnComplete.hide()
 
@@ -59,6 +63,12 @@ func setup(_data, _userid, _list):
 	data = _data
 	userid = _userid
 	call_deferred("update_data")
+func FIX_OUTDATED_DATA_FORMATS():
+	if !data.has("flags"):
+		data["flags"] = data.get("counter", 0)
+		data.erase("counter")
+	data.flags = int(data.flags)
+	data.open = int(data.open)
 
 func _ready():
 	var _r = get_tree().root.connect("size_changed", self, "resize")
@@ -317,19 +327,59 @@ func _on_CheckBox_toggled(button_pressed):
 		return
 	data["counter"] = int(button_pressed)
 	Global.set_unsaved_changes(true)
+func _on_OptionButton_item_selected(index):
+	if !is_inside_tree():
+		return
+	match index:
+		0:
+			data["flags"] = 0
+		1:
+			data["flags"] = 1
+		2:
+			data["flags"] = 2
+	Global.set_unsaved_changes(true)
+
+func set_color(color):
+	var COLOR_NORMAL_PRESSED = null
+	var COLOR_HOVER = null
+	var COLOR_HOVER_PRESSED = null
+	match color:
+		"gold":
+			COLOR_NORMAL_PRESSED = Color("ffe300")
+			COLOR_HOVER = Color(1,1,1,1)
+			COLOR_HOVER_PRESSED = Color("fbff80")
+		"grey":
+			COLOR_NORMAL_PRESSED = Color("a0a0a0")
+			COLOR_HOVER = Color(1,1,1,0.5)
+			COLOR_HOVER_PRESSED = Color("a0a0a0")
+	
+	$Button.set("custom_colors/font_color",COLOR_NORMAL_PRESSED)
+	$Button.set("custom_colors/font_color_hover",COLOR_HOVER)
+	$Button.set("custom_colors/font_color_hover_pressed",COLOR_HOVER_PRESSED)
+	$Button.set("custom_colors/font_color_pressed",COLOR_NORMAL_PRESSED)
+	if list != "todo":
+		$Button/LabelDate.set("custom_colors/font_color",COLOR_NORMAL_PRESSED)
 
 func _process(_delta):
-	if list != "users" && data != null && ((data.get("counter",false) && list == "waitlist") || list == "todo"):
-		$Button.set("custom_colors/font_color",Color("ffe300"))
-		$Button.set("custom_colors/font_color_hover",Color(1,1,1,1))
-		$Button.set("custom_colors/font_color_hover_pressed",Color("fbff80"))
-		$Button.set("custom_colors/font_color_pressed",Color("ffe300"))
-	else:
-		$Button.set("custom_colors/font_color",null)
-		$Button.set("custom_colors/font_color_hover",null)
-		$Button.set("custom_colors/font_color_hover_pressed",null)
-		$Button.set("custom_colors/font_color_pressed",null)
+	match list:
+		"todo":
+			set_color("gold")
+		"users":
+			set_color(null)
+		"old":
+			set_color("grey")
+		_:
+			if data != null:
+				if data.get("flags",0) & Global.FLAGS.IMPORTANT:
+					set_color("gold")
+				elif data.get("flags",0) & Global.FLAGS.ON_HOLD:
+					set_color("grey")
+				else:
+					set_color(null)
+			else:
+				set_color(null)
 
 func _on_Button2_pressed():
 	resize()
 	pass # Replace with function body.
+

@@ -77,9 +77,20 @@ text = "Waitlist"
 [node name="Counter" parent="Header/BtnWaitlist" instance=ExtResource( 5 )]
 mouse_default_cursor_shape = 2
 
-[node name="BtnHistorics" type="Button" parent="Header"]
+[node name="BtnOnHold" type="Button" parent="Header"]
 margin_left = 169.0
-margin_right = 196.0
+margin_right = 214.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 3 )
+toggle_mode = true
+text = "OnHold"
+
+[node name="BtnHistorics" type="Button" parent="Header"]
+margin_left = 216.0
+margin_right = 243.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 focus_mode = 0
@@ -89,8 +100,8 @@ toggle_mode = true
 text = "Old"
 
 [node name="BtnUsers" type="Button" parent="Header"]
-margin_left = 198.0
-margin_right = 240.0
+margin_left = 245.0
+margin_right = 287.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 focus_mode = 0
@@ -257,6 +268,7 @@ text = "test"
 [connection signal="pressed" from="Header/BtnTODO" to="." method="_on_BtnTODO_pressed"]
 [connection signal="pressed" from="Header/BtnPWYW" to="." method="_on_BtnPWYW_pressed"]
 [connection signal="pressed" from="Header/BtnWaitlist" to="." method="_on_BtnWaitlist_pressed"]
+[connection signal="pressed" from="Header/BtnOnHold" to="." method="_on_BtnOnHold_pressed"]
 [connection signal="pressed" from="Header/BtnHistorics" to="." method="_on_BtnHistorics_pressed"]
 [connection signal="pressed" from="Header/BtnUsers" to="." method="_on_BtnUsers_pressed"]
 [connection signal="pressed" from="Header/BtnSettings" to="." method="_on_BtnSettings_pressed"]

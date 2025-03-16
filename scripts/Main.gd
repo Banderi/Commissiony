@@ -9,21 +9,11 @@ func _process(_delta):
 	# for the "Waitlist" tab, only entries that ar marked as important add up.
 	var c = 0
 	for i in Global.DATA.lists.get("waitlist",[]):
-		if i.get("counter", 0) == 1:
+		if int(i.get("flags", 0)) & Global.FLAGS.IMPORTANT:
 			c += 1
 	$Header/BtnWaitlist/Counter.set_count(c)
 	
-	# testing!
-	if $Button.pressed:
-		Global.populate_list("old")
-	else:
-		Global.__att = 0.0
-		Global.__tA = 0.0
-		Global.__tB = 0.0
-	
-	
 	# continuously update the "last_tab" user var
-	return
 	for n in $Header.get_children().size():
 		if $Header.get_child(n).pressed:
 			if n != Global.SETTINGS.get("last_tab",1):
@@ -103,7 +93,11 @@ func _on_BtnTODO_pressed():
 func _on_BtnWaitlist_pressed():
 	cleartabs()
 	$Header/BtnWaitlist.mouse_filter = MOUSE_FILTER_IGNORE
-	Global.populate_list("waitlist")
+	Global.populate_list("waitlist", [], [Global.FLAGS.ON_HOLD])
+func _on_BtnOnHold_pressed():
+	cleartabs()
+	$Header/BtnOnHold.mouse_filter = MOUSE_FILTER_IGNORE
+	Global.populate_list("waitlist", [Global.FLAGS.ON_HOLD])
 func _on_BtnUsers_pressed():
 	cleartabs()
 	$Header/BtnUsers.mouse_filter = MOUSE_FILTER_IGNORE
@@ -125,3 +119,4 @@ func _on_Autosave_toggled(button_pressed):
 
 func _on_Button_pressed(): # unused, settings button?
 	pass # Replace with function body.
+
