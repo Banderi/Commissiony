@@ -278,6 +278,43 @@ func _on_LineEdit_text_entered(new_text):
 					change_extra(split[1])
 			else:
 				name_edit_lost_focus = true
+func _on_LineEdit_gui_input(event):
+	if Input.is_key_pressed(KEY_DOWN):
+		scroll_autocomplete(1)
+	if Input.is_key_pressed(KEY_UP):
+		scroll_autocomplete(-1)
+func scroll_autocomplete(direction):
+	var line_edit = $Button/LineEdit
+	var curr_name = line_edit.text
+	
+	# get autocomplete's list of VISIBLE items
+	var corrected_list = []
+	for child in Global.autocomplete_list.get_children():
+		if child.visible:
+			corrected_list.push_back(child)
+	
+	# find the currently selected name (if any)
+	var selected_l = -1
+	var total_l = corrected_list.size()
+	for l in total_l:
+		var child = corrected_list[l]
+		if selected_l == -1 && child.text == curr_name:
+			selected_l = l
+
+	# scroll!
+	match direction:
+		-1: # UP
+			if selected_l < 1:
+				return
+			else:
+				line_edit.text = corrected_list[selected_l - 1].text
+		1: # DOWN
+			if selected_l == total_l - 1:
+				return
+			elif selected_l == -1:
+				line_edit.text = corrected_list[0].text
+			else:
+				line_edit.text = corrected_list[selected_l + 1].text
 
 func _input(_event):
 	if name_edit_lost_focus:
